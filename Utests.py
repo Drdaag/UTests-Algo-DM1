@@ -1,20 +1,32 @@
 # Special Python function to load module with its file name
 from importlib.machinery import SourceFileLoader
+import random
+random.seed()
 
 # My handout
-myfile = "NAME OF THE FILE.py"
+myfile = "NAME OF YOUR FILE.py"
 # Load module. Same result as "import mycode"
 mycode = SourceFileLoader('mycode', myfile).load_module()
+
+def simple_check(name, tru, val):
+    test = ("[OK]" if tru == val else "-----------NO")
+    print(f"{name} : {test}")
+    if(test == "-----------NO"):
+        print(f"{tru} =\n{val}")
+        print()
 
 print("---Anti-bug---")
 
 
 # Constructeur :
-test = ("[OK]" if "[None]" == str(mycode.Heap()) else "-----------NO")
-print(f"Constructeur : {test}")
-if(test == "-----------NO"):
-    print("[None] =",mycode.Heap())
-    print()
+
+simple_check("Constructeur", [None], mycode.Heap())
+
+# test = ("[OK]" if "[None]" == str(mycode.Heap()) else "-----------NO")
+# print(f"Constructeur : {test}")
+# if(test == "-----------NO"):
+#     print("[None] =",mycode.Heap())
+#     print()
 
 print("\n---------heappush---------")
 
@@ -22,41 +34,75 @@ print("\n---------heappush---------")
 H2 = mycode.Heap()
 mycode.heappush(H2, "newelt", 42)
 
-tru_val = "[None, (42, 'newelt')]"
-test = ("[OK]" if tru_val == str(H2) else "-----------NO")
-print(f"heappush_vide : {test}")
-if(test == "-----------NO"):
-    print(tru_val," = ", H2, sep="")
-    print()
+simple_check("heappush_vide", [None, (42, 'newelt')], H2)
 
 
 #heappush_non_vide
 H = [None, (2, 'A'), (12, 'C'), (10, 'B'), (24, 'I'), (16, 'E'), (14, 'D'), (18, 'F'), (30, 'L'), (26, 'J'), (20, 'G'), (32, 'M'), (28, 'K'), (22, 'H')]
 mycode.heappush(H, 'N', 5)
 
-tru_val = "[None, (2, 'A'), (12, 'C'), (5, 'N'), (24, 'I'), (16, 'E'), (14, 'D'), (10, 'B'), (30, 'L'), (26, 'J'), (20, 'G'), (32, 'M'), (28, 'K'), (22, 'H'), (18, 'F')]"
-test = ("[OK]" if str(H) == tru_val else "-----------NO")
-print(f"heappush_non_vide : {test}")
-if(test == "-----------NO"):
-    print(tru_val ," =\n", H, sep="")
-    print()
+tru_val = [None, (2, 'A'), (12, 'C'), (5, 'N'), (24, 'I'), (16, 'E'), (14, 'D'), (10, 'B'), (30, 'L'), (26, 'J'), (20, 'G'), (32, 'M'), (28, 'K'), (22, 'H'), (18, 'F')]
+simple_check("heappush_non_vide", tru_val, H)
+
+
+#heappush_multiple_simple
+H2 = mycode.Heap()
+val = [None, (5, 'N'), (12, 'C'), (10, 'B'), (24, 'I'), (16, 'E'), (14, 'D'), (18, 'F'), (30, 'L'), (26, 'J'), (20, 'G'), (32, 'M'), (28, 'K'), (22, 'H')]
+leng = len(val)
+for i in range(1, leng):
+    mycode.heappush(H2, val[i][1], val[i][0])
+
+tru_val = [None, (5, 'N'), (12, 'C'), (10, 'B'), (24, 'I'), (16, 'E'), (14, 'D'), (18, 'F'), (30, 'L'), (26, 'J'), (20, 'G'), (32, 'M'), (28, 'K'), (22, 'H')]
+simple_check("heappush_multiple_simple", tru_val, H2)
+
+    
+#heappush_multiple_complexe
+H2 = mycode.Heap()
+val = [(2, 'A'), (22, 'H'), (22, 'F'), (3, 'B'), (22, 'J'), (5, 'C'), (10, 'G'), (18, 'D'), (33, 'I'), (15, 'E')]
+leng = len(val)
+for i in range(leng):
+    mycode.heappush(H2, val[i][1], val[i][0])
+
+tru_val = [None, (2, 'A'), (3, 'B'), (5, 'C'), (18, 'D'), (15, 'E'), (22, 'F'), (10, 'G'), (22, 'H'), (33, 'I'), (22, 'J')]
+simple_check("heappush_multiple_complexe", tru_val, H2)
 
 print("\n---------heappop---------")
 
 #heappop_non_vide
+H = [None, (2, 'A'), (12, 'C'), (5, 'N'), (24, 'I'), (16, 'E'), (14, 'D'), (10, 'B'), (30, 'L'), (26, 'J'), (20, 'G'), (32, 'M'), (28, 'K'), (22, 'H'), (18, 'F')]
 tmp = mycode.heappop(H)
-tru_val = "(2, 'A')"
-test = ("[OK]" if tru_val == str(tmp) else "-----------NO")
-print(f"heappop_non_vide_return : {test}")
+tru_val = (2, 'A')
+simple_check("heappop_non_vide_return", tru_val, tmp)
+
+tru_val = [None, (5, 'N'), (12, 'C'), (10, 'B'), (24, 'I'), (16, 'E'), (14, 'D'), (18, 'F'), (30, 'L'), (26, 'J'), (20, 'G'), (32, 'M'), (28, 'K'), (22, 'H')]
+simple_check("heappop_non_vide_list", tru_val, H)
+
+#heappop_until_empty
+H3 = [None, (2, 'A'), (12, 'C'), (10, 'B'), (24, 'I'), (16, 'E'), (14, 'D'), (18, 'F'), (30, 'L'), (26, 'J'), (20, 'G'), (32, 'M'), (28, 'K'), (22, 'H')]
+test = ""
+indice = 0
+while (len(H3) > 1 and test != "-----------NO"):
+    tru_val = H3[1]
+    tmp = mycode.heappop(H3)
+    test = ("[OK]" if tru_val == tmp and mycode.isheap(H3) else "-----------NO")
+    indice += 1
+print(f"heappop_until_empty_return : {test}")
 if(test == "-----------NO"):
     print(tru_val, " = ",tmp, sep="")
+    print(f"On the {indice}th heappop")
+    if(tru_val == tmp):
+        print("BUT IS NOT HEAP ANYMORE, YOU MIGHT CHECK YOUR ISHEAP")
     print() 
 
-tru_val = "[None, (5, 'N'), (12, 'C'), (10, 'B'), (24, 'I'), (16, 'E'), (14, 'D'), (18, 'F'), (30, 'L'), (26, 'J'), (20, 'G'), (32, 'M'), (28, 'K'), (22, 'H')]" 
-test = ("[OK]" if tru_val == str(H) else "-----------NO")
-print(f"heappop_non_vide_liste : {test}")
+H3 = [None, (2, 'A'), (12, 'C'), (10, 'B'), (24, 'I'), (16, 'E'), (14, 'D'), (18, 'F'), (30, 'L'), (26, 'J'), (20, 'G'), (32, 'M'), (28, 'K'), (22, 'H')]
+while (len(H3) > 1):
+    tru_val = H3[1]
+    tmp = mycode.heappop(H3)
+tru_val = "[None]" 
+test = ("[OK]" if tru_val == str(H3) else "-----------NO")
+print(f"heappop_until_empty_liste : {test}")
 if(test == "-----------NO"):
-    print(tru_val," = \n", H, sep="")
+    print(tru_val," = \n", H3, sep="")
     print() 
 
 
@@ -75,29 +121,17 @@ print("\n---------isheap---------")
 #isheap
 tmp = mycode.isheap(H)
 tru_val = True
-test = ("[OK]" if tru_val == tmp else "-----------NO")
-print(f"isheap_non_vide : {test}")
-if(test == "-----------NO"):
-    print(tru_val, " = ",tmp, sep="")
-    print()
+simple_check("isheap_non_vide", tru_val, tmp)
 
 #isheap_vide   
 tmp = mycode.isheap([None])
 tru_val = True
-test = ("[OK]" if tru_val == tmp else "-----------NO")
-print(f"isheap_vide : {test}")
-if(test == "-----------NO"):
-    print(tru_val, " = ",tmp, sep="")
-    print()
+simple_check("isheap_vide", tru_val, tmp)
     
 #isheap_False   
 tmp = mycode.isheap([None, (3, 'A'), (2, 'B'), (1, 'C')])
 tru_val = False
-test = ("[OK]" if tru_val == tmp else "-----------NO")
-print(f"isheap_False : {test}")
-if(test == "-----------NO"):
-    print(tru_val, " = ",tmp, sep="")
-    print()
+simple_check("isheap_False", tru_val, tmp)
     
 print("\n---------heapsort---------")   
     
@@ -115,20 +149,89 @@ if(test == "-----------NO"):
     print()
 
 
-# heapsort_nochange
-tru_val = "[('A', 20), ('B', 5), ('C', 10), ('D', 12), ('E', 15), ('F', 8), ('G', 2), ('H', 6), ('I', 2), ('J', 9)]"
-test = ("[OK]" if (tru_val == str(L)) else "-----------NO")
-print(f"heapsort_nochange : {test}")
-if(test == "-----------NO"):
-    print(tru_val, " = \n",L, sep="")
-    print()
+# heapsort_nochange_ori
+tru_val = [('A', 20), ('B', 5), ('C', 10), ('D', 12), ('E', 15), ('F', 8), ('G', 2), ('H', 6), ('I', 2), ('J', 9)]
+simple_check("heapsort_nochange_ori", tru_val, L)
     
 #heapsort_vide
 L = []
 tmp = mycode.heapsort(L)
-tru_val = "[]"
-test = ("[OK]" if (tru_val == str(tmp)) else "-----------NO")
-print(f"heapsort_vide : {test}")
+tru_val = []
+simple_check("heapsort_vide", tru_val, tmp)
+    
+    
+# RANDOM TESTS (may be unstable)
+print("\n+---------RANDOM TESTS---------+")
+print("|    May be unstable, don't    |")
+print("|  consider them if the others |")
+print("|         are not [OK]         |")
+print("+------------------------------+\n")
+
+
+H = mycode.Heap()
+for i in range(10):
+    mycode.heappush(H, 'e_'+str(i), random.randint(0, 50))
+
+#isheap_heappush_random
+tmp = mycode.isheap(L)
+tru_val = True
+test = ("[OK]" if (tru_val == tmp) else "-----------NO")
+print(f"isheap_heappush_random : {test}")
 if(test == "-----------NO"):
     print(tru_val, " = \n",tmp, sep="")
+    print(H)
     print()
+    
+H = mycode.Heap()
+for i in range(10):
+    mycode.heappush(H, 'e_'+str(i), random.randint(0, 50))
+
+#isheap_heappush_random_long
+H = mycode.Heap()
+for i in range(50):
+    mycode.heappush(H, 'e_'+str(i), random.randint(0, 50))
+
+tmp = mycode.isheap(L)
+tru_val = True
+test = ("[OK]" if (tru_val == tmp) else "-----------NO")
+print(f"isheap_heappush_random_long : {test}")
+if(test == "-----------NO"):
+    print(tru_val, " = \n",tmp, sep="")
+    print(H)
+    print()
+    
+#heappop_random_until_empty
+H3 = mycode.Heap()
+for i in range(10):
+    mycode.heappush(H3, 'e_'+str(i), random.randint(0, 50))
+    
+test = ""
+indice = 0
+while (len(H3) > 1 and test != "-----------NO"):
+    tru_val = H3[1]
+    tmp = mycode.heappop(H3)
+    test = ("[OK]" if tru_val == tmp and mycode.isheap(H3) else "-----------NO")
+    indice += 1
+print(f"heappop_random_until_empty_return : {test}")
+if(test == "-----------NO"):
+    print(tru_val, " = ",tmp, sep="")
+    print(f"On the {indice}th heappop")
+    if(tru_val == tmp):
+        print("BUT IS NOT HEAP ANYMORE, YOU MIGHT CHECK YOUR ISHEAP")
+    print() 
+
+
+H3 = mycode.Heap()
+for i in range(10):
+    mycode.heappush(H3, 'e_'+str(i), random.randint(0, 50))
+    
+test = ""
+while (len(H3) > 1):
+    tru_val = H3[1]
+    tmp = mycode.heappop(H3)
+tru_val = "[None]" 
+test = ("[OK]" if tru_val == str(H3) else "-----------NO")
+print(f"heappop_random_until_empty_liste : {test}")
+if(test == "-----------NO"):
+    print(tru_val," = \n", H3, sep="")
+    print() 
