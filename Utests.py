@@ -1,10 +1,11 @@
 # Special Python function to load module with its file name
 from importlib.machinery import SourceFileLoader
+from heapq import *
 import random
 random.seed()
 
 # My handout
-myfile = "NAME OF YOUR FILE.py"
+myfile = "NAME OF FILE.py"
 # Load module. Same result as "import mycode"
 mycode = SourceFileLoader('mycode', myfile).load_module()
 
@@ -79,12 +80,19 @@ simple_check("heappop_non_vide_list", tru_val, H)
 
 #heappop_until_empty
 H3 = [None, (2, 'A'), (12, 'C'), (10, 'B'), (24, 'I'), (16, 'E'), (14, 'D'), (18, 'F'), (30, 'L'), (26, 'J'), (20, 'G'), (32, 'M'), (28, 'K'), (22, 'H')]
+H3_res = [None, (2, 'A'), (12, 'C'), (10, 'B'), (24, 'I'), (16, 'E'), (14, 'D'), (18, 'F'), (30, 'L'), (26, 'J'), (20, 'G'), (32, 'M'), (28, 'K'), (22, 'H')]
 test = ""
 indice = 0
 while (len(H3) > 1 and test != "-----------NO"):
+    H3_res.pop(0)
     tru_val = H3[1]
     tmp = mycode.heappop(H3)
-    test = ("[OK]" if tru_val == tmp and mycode.isheap(H3) else "-----------NO")
+    heappop(H3_res)
+    # tmp3 = list(H3)
+    # tmp3.pop(0)
+    H3_res.insert(0, None) 
+    test = ("[OK]" if tru_val == tmp and H3 == H3_res else "-----------NO")
+    # print(H3,"\n" ,H3_res, sep="")
     indice += 1
 print(f"heappop_until_empty_return : {test}")
 if(test == "-----------NO"):
@@ -92,6 +100,7 @@ if(test == "-----------NO"):
     print(f"On the {indice}th heappop")
     if(tru_val == tmp):
         print("BUT IS NOT HEAP ANYMORE, YOU MIGHT CHECK YOUR ISHEAP")
+        print(H3_res,"\n" ,H3, sep="")
     print() 
 
 H3 = [None, (2, 'A'), (12, 'C'), (10, 'B'), (24, 'I'), (16, 'E'), (14, 'D'), (18, 'F'), (30, 'L'), (26, 'J'), (20, 'G'), (32, 'M'), (28, 'K'), (22, 'H')]
@@ -205,19 +214,26 @@ H3 = mycode.Heap()
 for i in range(10):
     mycode.heappush(H3, 'e_'+str(i), random.randint(0, 50))
     
+H3_res = list(H3)
+    
 test = ""
 indice = 0
 while (len(H3) > 1 and test != "-----------NO"):
+    H3_res.pop(0)
     tru_val = H3[1]
     tmp = mycode.heappop(H3)
-    test = ("[OK]" if tru_val == tmp and mycode.isheap(H3) else "-----------NO")
+    heappop(H3_res)
+    H3_res.insert(0, None)
+    test = ("[OK]" if tru_val == tmp and H3_res == H3 else "-----------NO")
+    # print(H3,"\n" ,H3_res, sep="")
     indice += 1
 print(f"heappop_random_until_empty_return : {test}")
 if(test == "-----------NO"):
     print(tru_val, " = ",tmp, sep="")
     print(f"On the {indice}th heappop")
     if(tru_val == tmp):
-        print("BUT IS NOT HEAP ANYMORE, YOU MIGHT CHECK YOUR ISHEAP")
+        print("BUT IS NOT HEAP ANYMORE, YOU MIGHT CHECK YOUR ISHEAP, OR YOUR HEAPPUSH")
+        print(H3_res,"\n" ,H3, sep="")
     print() 
 
 
